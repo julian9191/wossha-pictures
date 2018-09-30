@@ -1,3 +1,5 @@
-# wossha-pictures
+# wossha-clothing
 
-Microservicio encargado de la gestió de imagenes de wossha
+Microservice developed with spring-boot
+
+Entrar a: [http://localhost:8082/](http://localhost:8082/)
