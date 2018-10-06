@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.wossha.msbase.controllers.commands.ICommandSerializer;
+import com.wossha.msbase.commands.ICommandSerializer;
 import com.wossha.pictures.commands.savePicture.SavePictureSerializer;
 
 @Service

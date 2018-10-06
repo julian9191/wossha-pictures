@@ -3,7 +3,8 @@ package com.wossha.pictures.commands.savePicture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.wossha.msbase.controllers.commands.ICommand;
+import com.wossha.msbase.commands.CommandResult;
+import com.wossha.msbase.commands.ICommand;
 import com.wossha.msbase.exceptions.BusinessException;
 import com.wossha.msbase.exceptions.TechnicalException;
 import com.wossha.pictures.commands.savePicture.model.SavePicture;
@@ -13,7 +14,7 @@ import com.wossha.pictures.infrastructure.repositories.FileRepository;
 public class SavePictureCommand implements ICommand<SavePicture>{
 	
 	private SavePicture data;
-	private String user;
+	private String username;
 	
 	@Autowired
 	private FileRepository repo;
@@ -35,12 +36,14 @@ public class SavePictureCommand implements ICommand<SavePicture>{
 	}
 
 	@Override
-	public String execute() throws BusinessException, TechnicalException {
+	public CommandResult execute() throws BusinessException, TechnicalException {
+		CommandResult result = new CommandResult();
 		try {
 			
 			
 			//repo.addClothe(clothe);
-			return "La imagen se ha guardado correctamente";
+			result.setMessage("La imagen se ha guardado correctamente");
+			return result;
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw new TechnicalException("Ha ocurrido un error al intentar guardar la imagen");
@@ -48,8 +51,8 @@ public class SavePictureCommand implements ICommand<SavePicture>{
 	}
 
 	@Override
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

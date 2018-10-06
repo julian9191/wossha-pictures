@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wossha.msbase.controllers.commands.ICommand;
-import com.wossha.msbase.controllers.commands.ICommandSerializer;
+import com.wossha.msbase.commands.ICommand;
+import com.wossha.msbase.commands.ICommandSerializer;
 import com.wossha.pictures.commands.savePicture.model.SavePicture;
 
 @Component

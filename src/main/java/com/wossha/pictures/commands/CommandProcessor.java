@@ -7,15 +7,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wossha.msbase.commands.CommandResult;
+import com.wossha.msbase.commands.ICommand;
+import com.wossha.msbase.commands.ICommandSerializer;
 import com.wossha.msbase.controllers.ControllerWrapper;
-import com.wossha.msbase.controllers.commands.ICommand;
-import com.wossha.msbase.controllers.commands.ICommandSerializer;
 import com.wossha.msbase.exceptions.BusinessException;
 import com.wossha.msbase.exceptions.TechnicalException;
 
@@ -41,11 +44,14 @@ public class CommandProcessor extends ControllerWrapper{
             @SuppressWarnings("rawtypes")
 			ICommand command = cs.deserialize(json);
 
-            String message = command.execute();
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    		String username = auth.getPrincipal().toString();
+            command.setUsername(username);
+            CommandResult result = command.execute();
             
             logger.debug("command generated: "+json);
 
-            return new ResponseEntity<HashMap<String, String>>(wrapMessaje(message),HttpStatus.OK);
+            return new ResponseEntity<HashMap<String, String>>(wrapMessaje(result.getMessage()),HttpStatus.OK);
         } catch (TechnicalException e) {
             return new ResponseEntity<HashMap<String, String>>(wrapMessaje(e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (  IOException | BusinessException e) {
