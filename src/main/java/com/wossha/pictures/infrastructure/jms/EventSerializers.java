@@ -17,7 +17,7 @@ public class EventSerializers {
     private SavePictureEventSerializer savePictureEventSerializer;
 
     public void initMapper() {
-        listeners.put("SavePicture", savePictureEventSerializer);
+        listeners.put("SAVE-PICTURE", savePictureEventSerializer);
     }
 
 
