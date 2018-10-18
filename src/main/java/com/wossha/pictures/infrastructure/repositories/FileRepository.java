@@ -36,5 +36,11 @@ public class FileRepository implements Repository<PictureFileDTO> {
     	
     }
 
+	public void removeByUuid(String uuidPictureToRemove) {
+		pictureDao = dbi.onDemand(PictureDao.class);
+		pictureDao.removeByUuid(uuidPictureToRemove);
+		
+	}
+
 	
 }

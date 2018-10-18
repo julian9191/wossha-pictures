@@ -50,6 +50,10 @@ public class SavePictureEventListener implements EventProcessor<SavePictureEvent
 
 		dto.setValue(fileByteArray);
 		repo.add(dto);
+		
+		if(data.getMessage().getUuidPictureToRemove()!=null) {
+			repo.removeByUuid(data.getMessage().getUuidPictureToRemove());
+		}
 
         return events;
     }

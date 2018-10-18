@@ -22,4 +22,8 @@ public abstract  class PictureDao {
 	@RegisterMapper(PictureMapperJdbi.class)
     @SqlUpdate("Insert into TWSS_PICTURES (UUID,USERNAME,NAME,FILE_TYPE,TYPE,FILE_SIZE,VALUE) values (:picture.uuid, :picture.username, :picture.name, :picture.fileType, :picture.type, :picture.fileSize, :picture.value)")
     public abstract void add(@BindBean("picture") PictureFileDTO picture);
+	
+	//REMOVES--------------------------------------------------------------------------------------------------------------------------------------
+	@SqlUpdate("DELETE TWSS_PICTURES WHERE UUID =:uuid")
+    public abstract void removeByUuid(@Bind("uuid") String uuid);
 }
