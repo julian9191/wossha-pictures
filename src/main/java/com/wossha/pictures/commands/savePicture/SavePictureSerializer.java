@@ -13,7 +13,8 @@ import com.wossha.pictures.commands.savePicture.model.SavePicture;
 @Component
 public class SavePictureSerializer implements ICommandSerializer {
 	
-	private ObjectMapper m = new ObjectMapper();
+	@Autowired
+	private ObjectMapper m;
 	
 	@Autowired
 	private SavePictureCommand command;

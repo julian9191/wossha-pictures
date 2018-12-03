@@ -1,8 +1,14 @@
 package com.wossha.pictures.configure;
 
+import java.util.TimeZone;
+
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wossha.json.events.events.pictures.RemovePictureEvent.RemovePictureEvent;
 import com.wossha.json.events.events.pictures.SavePictureEvent.SavePictureEvent;
 import com.wossha.pictures.commands.CommandSerializers;
@@ -64,6 +70,17 @@ public class BeansConfig {
 		return new RemovePictureEventSerializer();
 	}
 	
+	//-------------------------------------------------------------------------
+	
+	@Bean
+	public ObjectMapper objectMapper() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		TimeZone tz = TimeZone.getDefault();
+		objectMapper.setTimeZone(tz);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return objectMapper;
+	}
+	
 	@Bean
 	public EventSerializers eventSerializers() {
 		EventSerializers es = new EventSerializers();
@@ -71,6 +88,17 @@ public class BeansConfig {
 		es.setRemovePictureEventSerializer(removePictureEventSerializer());
 		es.initMapper();
 		return es;
+	}
+	
+	@Bean
+	public Jackson2ObjectMapperBuilderCustomizer init() {
+	    return new Jackson2ObjectMapperBuilderCustomizer() {
+
+	    	@Override
+	        public void customize(Jackson2ObjectMapperBuilder builder) {
+	            builder.timeZone(TimeZone.getDefault());
+	        }
+	    };
 	}
 	
 }
