@@ -3,10 +3,13 @@ package com.wossha.pictures.infrastructure.jms.savePictureEvent;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.wossha.json.events.events.api.Event;
 import com.wossha.json.events.events.api.EventProcessor;
+import com.wossha.json.events.events.pictures.SavePictureEvent.PictureInfo;
 import com.wossha.json.events.events.pictures.SavePictureEvent.SavePictureEvent;
 import com.wossha.json.events.exceptions.RecoverableException;
 import com.wossha.pictures.dto.PictureFileDTO;
@@ -35,24 +38,29 @@ public class SavePictureEventListener implements EventProcessor<SavePictureEvent
     public List<Event> execute() throws RecoverableException{
         List<Event> events = new ArrayList<>();
 
-		PictureFileDTO dto = new PictureFileDTO();
-    	dto.setUuid(data.getMessage().getUuidPicture());
-    	dto.setUsername(data.getUsername());
-    	dto.setName(data.getMessage().getName());
-    	dto.setFileType(data.getMessage().getFileType());
-    	dto.setType(data.getMessage().getType());
-    	dto.setFileSize(data.getMessage().getFileSize());
-    	
-    	String[] parts = data.getMessage().getValue().split(",");
-    	String base64 = parts[parts.length-1];
-    	
-    	byte[] fileByteArray = Base64.getDecoder().decode(base64.getBytes());
+        for (PictureInfo picture : data.getMessage().getPictures()) {
+			
+        	PictureFileDTO dto = new PictureFileDTO();
+        	dto.setUuid(picture.getUuidPicture());
+        	dto.setUsername(data.getUsername());
+        	dto.setName(picture.getName());
+        	dto.setFileType(picture.getFileType());
+        	dto.setType(picture.getType());
+        	dto.setFileSize(picture.getFileSize());
+        	
+        	String[] parts = picture.getValue().split(",");
+        	String base64 = parts[parts.length-1];
+        	
+        	byte[] fileByteArray = Base64.getDecoder().decode(base64.getBytes());
 
-		dto.setValue(fileByteArray);
-		repo.add(dto);
-		
-		if(data.getMessage().getUuidPictureToRemove()!=null) {
-			repo.removeByUuid(data.getMessage().getUuidPictureToRemove());
+    		dto.setValue(fileByteArray);
+    		repo.add(dto);
+		}
+        
+        List<String> uuids = data.getMessage().getPictures().stream().map(PictureInfo::getUuidPictureToRemove).collect(Collectors.toList());
+        
+        if(uuids != null && !uuids.isEmpty()) {
+			repo.removeByUuids(uuids);
 		}
 
         return events;

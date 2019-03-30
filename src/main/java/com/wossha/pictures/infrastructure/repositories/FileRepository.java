@@ -1,5 +1,7 @@
 package com.wossha.pictures.infrastructure.repositories;
 
+import java.util.List;
+
 import org.skife.jdbi.v2.IDBI;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.wossha.pictures.dto.PictureFileDTO;
@@ -39,6 +41,12 @@ public class FileRepository implements Repository<PictureFileDTO> {
 	public void removeByUuid(String uuidPictureToRemove) {
 		pictureDao = dbi.onDemand(PictureDao.class);
 		pictureDao.removeByUuid(uuidPictureToRemove);
+		
+	}
+	
+	public void removeByUuids(List<String> uuidPictureToRemove) {
+		pictureDao = dbi.onDemand(PictureDao.class);
+		pictureDao.removeByUuids(dbi, uuidPictureToRemove);
 		
 	}
 
