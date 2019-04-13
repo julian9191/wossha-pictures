@@ -1,8 +1,10 @@
 package com.wossha.pictures.infrastructure.jms.removePictureEvent;
 
 import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wossha.json.events.events.api.EventProcessor;
 import com.wossha.json.events.events.api.EventSerializer;
